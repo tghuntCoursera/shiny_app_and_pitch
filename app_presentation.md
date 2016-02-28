@@ -29,5 +29,5 @@ Example entry
 
 Output Results
 ========================================================
-The output values allow you to align the balance of the accounts so they are equally funded.
+The output values provide you with the amount required to fund the accounts for the specified number of days.
 ![plot of chunk unnamed-chunk-1](app_presentation-figure/unnamed-chunk-1-1.png)
