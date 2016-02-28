@@ -1,0 +1,67 @@
+MySchoolBucks funds calculator
+========================================================
+font-family: 'Helvetica'
+author: Thomas Hunt
+date: 2016/02/27
+
+Benifits of app
+========================================================
+- Reduces the amount of time it takes to calculate how much you need to add for multiple accounts
+- Reduces simple mathematical errors
+- It's easy to use
+- [Link to MySchoolBucks calculator](https://x679845678.shinyapps.io/MySchoolBucks_calculator/)
+
+Using the app:
+========================================================
+
+It's simple, just enter the following:
+
+- Child's name (Optional)
+- Current balance (defaults to 0)
+- Daily meal cost (can be a combination of breakfast and lunch)
+- Number of days to fund meals for
+
+
+Example entry
+========================================================
+ - Input values and get results!
+![example entry](example_entry.JPG)
+
+Output Results
+========================================================
+The output values allow you to align the balance of the accounts so they are equally funded.
+```{r, echo=FALSE, fig.width=11}
+  library(ggplot2)
+  library(gridExtra, quietly=TRUE, warn.conflicts=FALSE,verbose=FALSE)
+  library(grid, quietly=TRUE, warn.conflicts=FALSE,verbose=FALSE)
+
+  fontSize = 8
+  tt1 <- ttheme_default()
+  tt1$core$fg_params$fontsize=fontSize
+  tt1$rowhead$fg_params$fontsize=fontSize
+  tt1$colhead$fg_params$fontsize=fontSize
+  
+  # Siumulate data
+  dt <- data.frame(
+    names = c("Child 1", "Child 2", "Child 3", "Child 4"),
+    curr.bal = c(11.25, 13.50, 14.30, 12.10),
+    lunch.cost = c(2.85, 2.20, 2.70, 2.2),
+    target.lunches = c(20, 20, 20, 20),
+    add.to = c(0,0,0,0)
+  )
+    
+  for(i in 1:4) {
+    dt[i,"add.to"] = (dt[i,"target.lunches"] * dt[i,"lunch.cost"]) - dt[i,"curr.bal"]
+  }
+
+  p <- ggplot(data=dt, aes(x=names, y=add.to, fill=names)) + geom_bar(stat = "identity", position=position_dodge()) +
+      geom_text(aes(y=add.to, ymax=add.to, label=round(add.to,2)), position= position_dodge(width=0.9), vjust=-.5, color="black") + ylab("Amount to add") + xlab("Child")
+  
+  data.tg <- tableGrob(dt, theme=tt1)
+  #data.tg <- grid.table(dt, theme=tt1)
+  
+  data.tg$heights <- 
+  grid.arrange(data.tg, p, nrow=2, heights=c(1,4))
+  #print(data.tg)
+  #print(p)
+```
